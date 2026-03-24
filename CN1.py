@@ -12,7 +12,7 @@ class Signal:
         self.corrupted = False
 
         if is_bits:
-            self.bits = message   # already bits
+            self.bits = message   
         else:
             self.bits = self._encode()
 
@@ -74,12 +74,9 @@ class Frame:
         return blocks
     
     def _hamming_encode(self, byte):
-        # 8 data bits need 4 parity bits → 12 bit codeword
-        # positions 1,2,4,8 are parity, rest are data
+
         d = [int(b) for b in byte]
-        # place data bits at non-power-of-2 positions
-        # positions: 1  2  3  4  5  6  7  8  9  10  11  12
-        # type:       P  P  D  P  D  D  D  P  D   D   D   D
+
         c = [0] * 12
         data_positions = [3, 5, 6, 7, 9, 10, 11, 12]
         for i, pos in enumerate(data_positions):
@@ -266,7 +263,7 @@ class EndDevice:
         print(f"\n All frames acknowledged — transmission complete!")
 
     def phy_send(self, frame):
-        # PHY layer receives frame from DLL, converts to signal
+
         print(f"\n[PHY] Received frame from DLL layer")
         bits = frame.to_bits()
         signal = Signal(bits, sender=self.name, destination=frame.dst_mac, is_bits=True)
@@ -275,7 +272,7 @@ class EndDevice:
         return signal
 
     def phy_receive(self, signal):
-        # PHY layer receives signal, converts back to frame for DLL
+
         print(f"\n[PHY] Signal received — converting to frame for DLL layer")
         frame = Frame.from_bits(signal.bits)
         if frame is None:
